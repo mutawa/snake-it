@@ -1,4 +1,5 @@
 # Snake It
+### [Live Demo](https://mutawa.github.io/snake-it/index.html)
 
 Back in the 90s, I used to play a game developed for the MSX computer with the name [Snake It].
 This is my attempt at re-creating the same game logic and game play on modern javascript equipped browsers.

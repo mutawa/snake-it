@@ -1,53 +1,19 @@
 class Snake {
-    constructor(segmentCount=2,col,row) {
+    constructor(segmentCount=3,col,row) {
 
         this.segments = [];
-        this.segments.push(new Segment(HEAD,col,row));
+        this.segments.push(new Segment("HR",col,row));
         for(let i=0; i<segmentCount-2; i++) {
-            this.segments.push(new Segment(BODY,--col,row));
+            this.segments.push(new Segment("BH",--col,row));
         }
-        this.segments.push(new Segment(TAIL, --col,row));
-        this.colSpeed = 0;
-        this.rowSpeed = 0;
-        this.angleTarget = RIGHTY.angle;
-        this.angleSpeed = 0;
+        this.segments.push(new Segment("TE", --col,row));
+
 
     }
 
     update() {
 
-        if(this.rowSpeed != 0 ) {
-            if(abs(this.segments[0].row - this.rowTarget)>0.1) {
-                this.segments[0].row += this.rowSpeed;
-            } else {
-                this.segments[0].row = this.rowTarget;
-                this.rowSpeed = 0;
-            }
-        }
-
-        if(this.colSpeed != 0 ) {
-            if(abs(this.segments[0].col - this.colTarget)>0.1) {
-                this.segments[0].col += this.colSpeed;
-            } else {
-                this.segments[0].col = this.colTarget;
-                this.colSpeed = 0;
-            }
-        }
-        if(this.colSpeed ==0 && this.rowSpeed ==0 ) {
-            this.angleSpeed = 0;
-        } else if(this.angleSpeed != 0 ) {
-            if(this.segments[0].direction.angle != this.angleTarget.angle) {
-
-                if(abs(this.segments[0].direction.angle - this.angleTarget.angle) > 15) {
-                    this.segments[0].direction.angle += this.angleSpeed;
-                } else {
-                    this.segments[0].direction.angle = this.angleTarget.angle;
-                    this.segments[0].direction.direction = this.angleTarget.name;
-
-                    this.angleSpeed = 0;
-                }
-            }
-        }
+        
 
         
         
@@ -59,86 +25,139 @@ class Snake {
         });
     }
 
-    move(direction) {
-        this.angleTarget = {};        
+    handleKey(direction) {
+        let head = this.segments[0];
+
+        head.previousDirection = head.direction;
+        
+
         switch(direction) {
             
             case RIGHT:
-                this.angleTarget.name = "right";
-                if(this.segments[0].direction.direction == "down") {
-                    
-                    this.angleTarget.angle = this.segments[0].direction.angle - 90;
-                    this.angleSpeed = -15;
-                } else if (this.segments[0].direction.direction == "up") {
-                    
-                    this.angleTarget.angle = this.segments[0].direction.angle + 90;
-                    this.angleSpeed = 15;
-                }
-                this.colSpeed = 0.07;
-                this.rowSpeed = 0;
-                this.colTarget = this.segments[0].col + 1;
-                this.rowTarget = this.segments[0].row;
+                this.move(1,0);
+                
                 break;
             case UP:
-                this.angleTarget.name = "up";
-                if(this.segments[0].direction.direction == "right") {
-                    
-                    this.angleTarget.angle = this.segments[0].direction.angle - 90;
-                    this.angleSpeed = -15;
-                } else if (this.segments[0].direction.direction == "left") {
-                    
-                    this.angleTarget.angle = this.segments[0].direction.angle + 90;
-                    this.angleSpeed = 15;
-                }    
 
-
-                
-                this.colSpeed = 0;
-                this.rowSpeed = -0.07;
-                this.colTarget = this.segments[0].col ;
-                this.rowTarget = this.segments[0].row  - 1;
+                this.move(0,-1);
                 break;
             case LEFT:
 
-                this.angleTarget.name = "left";
-                if(this.segments[0].direction.direction == "up") {
-                    
-                    this.angleTarget.angle = this.segments[0].direction.angle - 90;
-                    this.angleSpeed = -15;
-                } else if (this.segments[0].direction.direction == "down") {
-                    
-                    this.angleTarget.angle = this.segments[0].direction.angle + 90;
-                    this.angleSpeed = 15;
-                }
-
-                
-                this.colSpeed = -0.07;
-                this.rowSpeed = 0;
-                this.colTarget = this.segments[0].col - 1;
-                this.rowTarget = this.segments[0].row;
+                this.move(-1,0);
                 break;
             case DOWN:
-            
-                this.angleTarget.name = "down";
-                if(this.segments[0].direction.direction == "left") {
 
-                    this.angleTarget.angle = this.segments[0].direction.angle - 90;
-                    this.angleSpeed = -15;
-                } else if (this.segments[0].direction.direction == "right") {
-                    
-                    this.angleTarget.angle = this.segments[0].direction.angle + 90;
-                    this.angleSpeed = 15;
-                }    
-
-                this.colSpeed = 0;
-                this.rowSpeed = 0.07;
-                this.colTarget = this.segments[0].col;
-                this.rowTarget = this.segments[0].row + 1;
+                this.move(0,1);
                 break;
             default:
-                this.speed = 0;
+        
                 break;
         }
         
+    }
+    move(col,row) {
+        
+        let head = snake.segments[0];
+        let newTail = snake.segments[snake.segments.length-2];
+        let beforeTail = snake.segments[snake.segments.length-3];
+
+        let tail = snake.segments.pop();
+        
+
+        if(col==1) { head.direction = "R"; }
+        else if(col==-1) { head.direction = "L"; }
+        else if(row==1) { head.direction = "D"; }
+        else if(row==-1) { head.direction = "U"; }
+
+
+        tail.col = head.col;
+        tail.row = head.row;
+        tail.kind = "B";
+
+        newTail.kind = "T";
+        
+        switch(beforeTail.direction) {
+            case "NW":
+                if(beforeTail.row > newTail.row) { newTail.direction = "S"; }
+                else if(beforeTail.col > newTail.col) { newTail.direction = "E"; }
+                break;
+            case "NE":
+                if(beforeTail.row > newTail.row) { newTail.direction = "S"; }
+                else if(beforeTail.col < newTail.col) { newTail.direction = "W"; }
+                break;
+            case "SW":
+                if(beforeTail.row < newTail.row) { newTail.direction = "N"; }
+                else if(beforeTail.col > newTail.col) { newTail.direction = "E"; }
+                break;
+            case "SE":
+                if(beforeTail.row < newTail.row) { newTail.direction = "N"; }
+                else if(beforeTail.col < newTail.col) { newTail.direction = "W"; }
+                break;
+            case "H":
+                if(beforeTail.col > newTail.col) { newTail.direction = "E"; } 
+                else { newTail.direction = "W"; }
+                break;
+            case "V":
+                if(beforeTail.row > newTail.row) { newTail.direction = "S"; } 
+                else { newTail.direction = "N"; }
+                break;
+            default:
+                break;
+        }
+
+        
+        if( head.previousDirection == head.direction) {
+            
+            switch(head.direction) {
+                case "U":
+                case "D":
+                    tail.direction = "V";
+                    break;
+                case "R":
+                case "L":
+                    tail.direction = "H";
+                    break;
+                default:
+                    break;
+    
+            }    
+        } else {
+            
+            switch(head.previousDirection + head.direction) {
+                case "RD":
+                case "UL":
+                    tail.direction = "SW";
+                    break;
+
+                case "RU":
+                case "DL":
+                    tail.direction = "NW";
+                    break;
+                case "LU":
+                case "DR":
+                    tail.direction = "NE";
+                    break;
+                case "UR":
+                case "LD":
+                        tail.direction = "SE";
+                    break;
+                default:
+                    break;
+    
+            }
+        }
+        
+        
+
+        snake.segments.splice(1,0,tail);
+
+        
+        head.col += col;
+        head.row += row;
+        
+        console.clear();
+        console.table(snake.segments);
+        
+
     }
 }

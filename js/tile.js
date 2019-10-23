@@ -12,8 +12,13 @@ class Tile {
     }
 
     render() {
+        if(this.isOccupied) {
+            stroke("black")
+        } else {
+            noStroke();
+        }
         fill( this.tint );
-        noStroke();
+        
         rect(this.x,this.y,this.w, this.h);
     }
 }

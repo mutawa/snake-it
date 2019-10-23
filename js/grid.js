@@ -23,10 +23,33 @@ class Grid {
 
 
     }
+    isTileOccupied(col,row) {
+        let reply;
+        let markTile = this.tiles.forEach(tile => {
+            if(tile.row==row && tile.col==col) {
+                reply = tile.isOccupied;
+                return;
+            }
+        });
+        return reply;
+    }
     mark(col,row) {
-        let markTile = this.tiles.filter(tile => tile.row==row && tile.col==col);
-        console.log(markTile);
-        markTile.tint = "pink";
+        let markTile = this.tiles.forEach(tile => {
+            if(tile.row==row && tile.col==col) {
+                tile.isOccupied = true;
+                return;
+            }
+        });
+        
+    }
+    unmark(col,row) {
+        let markTile = this.tiles.forEach(tile => {
+            if(tile.row==row && tile.col==col) {
+                tile.isOccupied = false;
+                return;
+            }
+        });
+        
     }
 
     render() {

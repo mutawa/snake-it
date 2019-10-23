@@ -1,10 +1,12 @@
 class Segment {
-    constructor(kind="BH",col,row) {
+    constructor(kind="BH",col,row,tint="darkseagreen") {
         this.kind = kind[0];
         this.row = row;
         this.col = col;
         this.direction = kind[1];
         grid.mark(col,row);
+        this.tint = tint;
+
     }
 
     render() {
@@ -23,7 +25,7 @@ class Segment {
                     case "D": rotate(90); break;
                 }
                 
-                stroke("darkseagreen");
+                stroke(this.tint);
                 strokeWeight(20);
                 line(-grid.w/2,0,0,0);
 
@@ -34,7 +36,7 @@ class Segment {
                 
                 noStroke();
 
-                fill("darkseagreen");
+                fill(this.tint);
                 ellipse(0,0,0.6 * grid.w);
                 
                 fill("white");
@@ -47,7 +49,7 @@ class Segment {
              
                 break;
             case "B":
-                stroke("steelblue");
+                stroke(this.tint);
                 strokeWeight(20);
                 strokeCap(SQUARE);
                 switch(this.direction) {
@@ -75,7 +77,7 @@ class Segment {
 
                 break;
             case "T":
-                stroke("orange");
+                stroke(this.tint);
                 strokeCap(ROUND);
                 strokeWeight(20);
                 switch(this.direction) {

@@ -56,13 +56,19 @@ class Snake {
         
     }
     move(col,row) {
-        
         let head = snake.segments[0];
+        
+        if(head.direction=="R" && col==-1) { return; }
+        if(head.direction=="L" && col==1) { return; }
+        if(head.direction=="U" && row==1) { return; }
+        if(head.direction=="D" && row==-1) { return; }
+
+        
         let newTail = snake.segments[snake.segments.length-2];
         let beforeTail = snake.segments[snake.segments.length-3];
 
         let tail = snake.segments.pop();
-        
+        grid.unmark(tail.col, tail.row);
 
         if(col==1) { head.direction = "R"; }
         else if(col==-1) { head.direction = "L"; }
@@ -151,13 +157,21 @@ class Snake {
 
         snake.segments.splice(1,0,tail);
 
+        if(grid.isTileOccupied(head.col + col, head.row + row)) {
+            this.kill();
+        }
         
         head.col += col;
         head.row += row;
+        grid.mark(head.col, head.row);
         
-        console.clear();
-        console.table(snake.segments);
+        
         
 
+    }
+    kill() {
+        this.segments.forEach(seg => {
+            seg.tint = "red";
+        });
     }
 }

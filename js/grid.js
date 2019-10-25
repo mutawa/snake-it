@@ -33,18 +33,19 @@ class Grid {
         });
         return reply;
     }
-    mark(col,row) {
-        let markTile = this.tiles.forEach(tile => {
-            if(tile.row==row && tile.col==col) {
+    mark(segment) {
+
+        this.tiles.forEach(tile => {
+            if(tile.row==segment.row && tile.col==segment.col) {
                 tile.isOccupied = true;
                 return;
             }
         });
         
     }
-    unmark(col,row) {
-        let markTile = this.tiles.forEach(tile => {
-            if(tile.row==row && tile.col==col) {
+    unmark(segment) {
+        this.tiles.forEach(tile => {
+            if(tile.row==segment.row && tile.col==segment.col) {
                 tile.isOccupied = false;
                 return;
             }

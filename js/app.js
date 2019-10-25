@@ -1,4 +1,5 @@
 "use strict";
+const debugMode = true;
 
 let grid;
 let snake;
@@ -7,9 +8,10 @@ let keys = {};
 function setup() {
     
     angleMode(DEGREES);
+    textAlign(LEFT,TOP);
     createCanvas(800, 400);
     grid = new Grid(16, 8);
-    snake = new Snake(15,5,2);
+    snake = new Snake(13,2,7);
     frameRate(8);
     
     

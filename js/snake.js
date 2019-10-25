@@ -1,12 +1,18 @@
 class Snake {
-    constructor(segmentCount=3,col,row) {
+    constructor(col,row,segmentCount=3) {
 
         this.segments = [];
-        this.segments.push(new Segment("HR",col,row));
-        for(let i=0; i<segmentCount-2; i++) {
-            this.segments.push(new Segment("BH",--col,row));
-        }
-        this.segments.push(new Segment("TE", --col,row));
+
+        this.segments.push(new Segment("HWE",col,row));
+        this.segments.push(new Segment("BWE",--col,row));
+        this.segments.push(new Segment("BSE",--col,row));
+        this.segments.push(new Segment("BWN",col,++row));
+        this.segments.push(new Segment("BWE",--col,row));
+        // for(let i=0; i<segmentCount-2; i++) {
+        //     this.segments.push(new Segment("BWE",--col,row));
+        // }
+
+        this.segments.push(new Segment("TWE", --col,row));
 
 
     }
@@ -34,20 +40,20 @@ class Snake {
         switch(direction) {
             
             case RIGHT:
-                this.move(1,0);
+                this.move("WE");
                 
                 break;
             case UP:
 
-                this.move(0,-1);
+                this.move("SN");
                 break;
             case LEFT:
 
-                this.move(-1,0);
+                this.move("EW");
                 break;
             case DOWN:
 
-                this.move(0,1);
+                this.move("NS");
                 break;
             default:
         
@@ -55,26 +61,27 @@ class Snake {
         }
         
     }
-    move(col,row) {
+    move(toDirection,fraction) {
         let head = snake.segments[0];
-        
-        if(head.direction=="R" && col==-1) { return; }
-        if(head.direction=="L" && col==1) { return; }
-        if(head.direction=="U" && row==1) { return; }
-        if(head.direction=="D" && row==-1) { return; }
+        if(head.orientation[0] == toDirection[1]) { return; }
 
         
+
+        let col = 0,row = 0;
+        switch(toDirection) {
+            case "WE": col=1; row=0; break;
+            case "EW": col=-1; row=0; break;
+            case "NS": col=0; row=1; break;
+            case "SN": col=0; row=-1; break;
+            default:
+                break;
+        }
+
         let newTail = snake.segments[snake.segments.length-2];
         let beforeTail = snake.segments[snake.segments.length-3];
 
         let tail = snake.segments.pop();
-        grid.unmark(tail.col, tail.row);
-
-        if(col==1) { head.direction = "R"; }
-        else if(col==-1) { head.direction = "L"; }
-        else if(row==1) { head.direction = "D"; }
-        else if(row==-1) { head.direction = "U"; }
-
+        grid.unmark(tail);
 
         tail.col = head.col;
         tail.row = head.row;
@@ -112,48 +119,8 @@ class Snake {
         }
 
         
-        if( head.previousDirection == head.direction) {
-            
-            switch(head.direction) {
-                case "U":
-                case "D":
-                    tail.direction = "V";
-                    break;
-                case "R":
-                case "L":
-                    tail.direction = "H";
-                    break;
-                default:
-                    break;
-    
-            }    
-        } else {
-            
-            switch(head.previousDirection + head.direction) {
-                case "RD":
-                case "UL":
-                    tail.direction = "SW";
-                    break;
-
-                case "RU":
-                case "DL":
-                    tail.direction = "NW";
-                    break;
-                case "LU":
-                case "DR":
-                    tail.direction = "NE";
-                    break;
-                case "UR":
-                case "LD":
-                        tail.direction = "SE";
-                    break;
-                default:
-                    break;
-    
-            }
-        }
-        
-        
+        tail.orientation = head.orientation[0] + toDirection[1];
+        head.orientation = toDirection;
 
         snake.segments.splice(1,0,tail);
 
@@ -163,7 +130,8 @@ class Snake {
         
         head.col += col;
         head.row += row;
-        grid.mark(head.col, head.row);
+        
+        grid.mark(head);
         
         
         

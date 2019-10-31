@@ -11,7 +11,7 @@ class Grid {
         for(let row=0; row<this.rows; row++) {
             for(let col=0; col<this.cols; col++) {
                 
-                let tint = count%2 ? "gold" : "beige ";
+                let tint = count%2 ? "#eee" : "#ccc ";
                 this.tiles.push(new Tile(col,row,this.w,this.h,tint));
 
                 

@@ -23,23 +23,35 @@ class Segment {
     }
 
     update() {
-        this.vel.add(this.acc);
-        this.pos.add(this.vel);
-        this.acc.mult(0);
-        this.seek();
+        if(!snake.segments[0].isIdle) {
+            this.vel.add(this.acc);
+            this.pos.add(this.vel);
+            this.acc.mult(0);
+            this.seek();
+        }
+        
     }
 
     seek() {
-        let t = this.target.copy();
-        let direct = t.sub(this.pos);
-        direct.limit(5);
-
-        let v = direct.sub(this.vel);
-        //let d = dist(this.pos.x,this.pos.y,this.target.x,this.target.y);
-        //let m = map(d,0,grid.w,0,10);
-        //v.mult(d);
-
-        this.applyForce(v);
+        let desired = p5.Vector.sub(this.target, this.pos);
+        let d = desired.mag();
+        desired.normalize();
+        
+        if(d<grid.w/2) {
+            let m = map(d, 0, grid.w, 0, 30);
+            desired.mult(m);
+        } else {
+            desired.mult(4);
+        }
+        if(d<1 && !snake.segments[0].isIdle) {
+            snake.segments[0].isIdle = true;
+            //this.pos.x = this.col * grid.w + grid.w/2;
+            //this.pos.y = this.row * grid.w + grid.w/2;
+        }
+        let steer = p5.Vector.sub(desired, this.vel);
+        steer.limit();
+        this.applyForce(steer); 
+        
     }
 
     applyForce(f) {
@@ -47,11 +59,19 @@ class Segment {
     }
 
     render() {
+        push();
+        translate(this.pos.x, this.pos.y);
+        rotate(this.vel.heading());
         noStroke();
-        fill(200,50,100,100);
-        ellipse(this.pos.x, this.pos.y, 20);
-        stroke(0,70);
-        line(this.pos.x,this.pos.y,this.target.x,this.target.y);
+        fill("darkgreen");
+        arc(0,-grid.w/4, grid.w/4, grid.w/4, 0, 180);
+        arc(0, grid.w/4, grid.w/4, grid.w/4, 180, 0);
+        pop(); 
         
+
+        // if(this.kind=="H") {
+        //     text(this.vel.heading(), 100,100);
+        // }
+
     }
 }

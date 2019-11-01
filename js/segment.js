@@ -38,7 +38,7 @@ class Segment {
         desired.normalize();
         
         if(d<grid.w/2) {
-            let m = map(d, 0, grid.w, 0, 30);
+            let m = map(d, 0, grid.w, 0, 15);
             desired.mult(m);
         } else {
             desired.mult(4);
@@ -58,10 +58,10 @@ class Segment {
         this.acc.add(f);
     }
 
-    render() {
+    render(heading) {
         push();
         translate(this.pos.x, this.pos.y);
-        rotate(this.vel.heading());
+        rotate((heading + this.vel.heading())/2);
         noStroke();
         fill("darkgreen");
         arc(0,-grid.w/4, grid.w/4, grid.w/4, 0, 180);

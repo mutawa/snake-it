@@ -9,7 +9,7 @@ function setup() {
     angleMode(DEGREES);
     createCanvas(800, 400);
     grid = new Grid(16, 8);
-    snake = new Snake(5,5,2);
+    snake = new Snake(12,5,2);
     //frameRate(8);
     
     

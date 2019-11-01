@@ -21,7 +21,7 @@ class Snake {
 
     render() {
         let head = this.segments[0];
-
+        curveTightness(6);
         
     
         // draw the body
@@ -30,8 +30,13 @@ class Snake {
         for(let i=this.segments.length-1; i>0; i--) {
             let c=this.segments[i];
             let n=this.segments[i-1];
+            var midX=c.pos.x+(n.pos.x-c.pos.x)*0.50;
+            var midY=c.pos.y+(n.pos.y-c.pos.y)*0.50;
             line(c.pos.x, c.pos.y, n.pos.x,n.pos.y);
-            c.render();
+            //curve( c.pos.x, c.pos.y, c.pos.x, c.pos.y, midX+random(-1,1), midY+random(-1,1), n.pos.x, n.pos.y);
+            //line(c.pos.x, c.pos.y, midX, midY);
+            //line(midX, midY, n.pos.x, n.pos.y);
+            c.render(n.vel.heading());
         }
 
         // draw the head
@@ -41,6 +46,10 @@ class Snake {
         
         noStroke();
 
+        // fill("darkgreen");
+        // arc(-grid.w/2,0,grid.w/4,grid.w/4,0,360);
+        // arc(-grid.w/2,grid.w/4,grid.w/4,grid.w/4, 180,0);
+        
         fill(head.tint);
         ellipse(0,0,0.6 * grid.w);
         
@@ -51,6 +60,7 @@ class Snake {
         ellipse(-2,-4,5);
         ellipse(-2, 4,5);
         pop();
+        
 
     }
 

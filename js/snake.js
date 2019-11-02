@@ -4,9 +4,9 @@ class Snake {
         this.segments = [];
         this.segments.push(new Segment("HWE",col,row));
         for(let i=0; i<segmentCount-2; i++) {
-            this.segments.push(new Segment("BWE",--col,row));
+            this.segments.push(new Segment("BWE",--col,row, "green"));
         }
-        this.segments.push(new Segment("TWE", --col,row));
+        this.segments.push(new Segment("T", --col,row, "black"));
 
 
     }
@@ -86,17 +86,36 @@ class Snake {
         if(head.row + row > grid.rows-1 || head.row + row < 0) { return; }
         if(head.col + col > grid.cols-1 || head.col + col < 0) { return; }
         
-        if(head.row+row == neck.row && head.col+col==neck.col) { console.log("cant"); return;}
-        
+        if(head.row+row == neck.row && head.col+col==neck.col) { return;}
+        console.clear();
 
-        for(let i=this.segments.length-1; i>0; i--) {
+        if(grid.hasFood(head.col+col, head.row+row)) {
+            console.log("eating");
+            head.isEating = true; 
+            let seg = new Segment("BE", head.col, head.row, "red");
+            this.segments.splice(1,0,seg);
+        } else { 
+            head.isEating = false; 
+        }
+        
+        let startFrom = this.segments.length-1;
+        if(head.isEating) {
+            startFrom = 0;
+        }
+
+        for(let i=startFrom; i>0; i--) {
+
             let c = this.segments[i];
             let n = this.segments[i-1];
+            console.log(`(${c.kind}:${c.col},${c.row}) <- (${n.kind}:${n.col},${n.row})`);
             c.target = n.pos.copy();
             c.row = n.row;
             c.col = n.col;
+        
 
         }
+        console.log(`(${head.kind}:${head.col+col},${head.row+row})`);
+
         let oldX = (head.col) * grid.w + grid.w/2;
         let oldY = (head.row) * grid.w + grid.w/2;
         head.col += col;

@@ -3,15 +3,21 @@
 let grid;
 let snake;
 let keys = {};
+let foods = [];
 
 function setup() {
     
     angleMode(DEGREES);
     createCanvas(800, 400);
     grid = new Grid(16, 8);
-    snake = new Snake(12,5,2);
+    snake = new Snake(3,5,2);
     //frameRate(8);
-    
+    for(let i=1; i<20; i++) {
+        let col = parseInt(random(grid.cols));
+        let row = parseInt(random(grid.rows));
+
+        foods.push(new Food(col, row));
+    }
     
 }
 
@@ -30,6 +36,10 @@ function handleKeys() {
 function draw() {
     //background(255);
     grid.render();
+
+    foods.forEach(food => {
+        food.render();
+    });
 
     snake.update();
     snake.render();

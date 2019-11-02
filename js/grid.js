@@ -55,4 +55,9 @@ class Grid {
     render() {
         this.tiles.forEach(tile => { tile.render(); });
     }
+
+    hasFood(col, row) {
+        let exists = foods.filter(food => food.col==col && food.row==row );
+        return exists.length>0;
+    }
 }

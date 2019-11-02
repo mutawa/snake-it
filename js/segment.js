@@ -63,7 +63,7 @@ class Segment {
         translate(this.pos.x, this.pos.y);
         rotate((heading + this.vel.heading())/2);
         noStroke();
-        fill("darkgreen");
+        fill(this.tint);
         arc(0,-grid.w/4, grid.w/4, grid.w/4, 0, 180);
         arc(0, grid.w/4, grid.w/4, grid.w/4, 180, 0);
         pop(); 

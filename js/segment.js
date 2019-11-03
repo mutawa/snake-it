@@ -8,6 +8,16 @@ class Segment {
         
         //grid.mark(col,row);
         this.tint = tint;
+        this.animation = 0;
+
+    }
+
+    update() {
+        if(this.animation > 0 && this.animation<1) {
+            this.animation += 0.2;
+        }
+        
+        
 
     }
 
@@ -34,6 +44,7 @@ class Segment {
                     case "W": rotate(180); break;
                     case "S": rotate(90); break;
                 }
+                translate(grid.w * this.animation, 0);
                 strokeCap(SQUARE);
                 stroke(this.tint);
                 strokeWeight(grid.w * 0.5);
@@ -59,6 +70,7 @@ class Segment {
              
                 break;
             case "B":
+                
                 stroke(this.tint);
                 strokeWeight(grid.w/2);
                 strokeCap(SQUARE);
@@ -81,7 +93,8 @@ class Segment {
                         default:
                             break;
                     }
-                    
+                    translate(grid.w * this.animation, 0);
+
                     line(-grid.w/2,0,grid.w/2,0);
                     noStroke();
                     fill("darkgreen");
@@ -146,6 +159,7 @@ class Segment {
                     default: 
                         break;
                 }
+                translate(grid.w * this.animation, 0);
 
                 stroke(this.tint);
                 strokeCap(SQUARE);

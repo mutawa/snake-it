@@ -12,7 +12,7 @@ function setup() {
     createCanvas(800, 400);
     grid = new Grid(16, 8);
     snake = new Snake(13,2,7);
-    frameRate(8);
+    //frameRate(8);
     
     
 }
